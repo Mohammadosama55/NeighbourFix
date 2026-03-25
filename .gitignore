@@ -1,0 +1,17 @@
+# Ignore node_modules in any folder
+node_modules/
+
+# Ignore environment variables (Very Important for Security!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore build/dist folders
+dist/
+build/
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
