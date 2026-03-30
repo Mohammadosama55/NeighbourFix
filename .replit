@@ -1,0 +1,13 @@
+modules = ["nodejs-20"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+PORT = "5000"
+JWT_SECRET = "52bfb4b390715a45bacd1d8f333e064d534eb453fe9c88d93c305926d3a506dd"
+NODE_ENV = "development"
