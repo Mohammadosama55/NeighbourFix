@@ -1,0 +1,92 @@
+.home-page { padding: 28px 0 48px; }
+
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.home-hero h1 { font-size: 26px; font-weight: 800; }
+.home-hero p { color: var(--muted); font-size: 15px; margin-top: 4px; }
+
+.stats-row { display: flex; gap: 12px; }
+
+.stat-chip {
+  background: #fee2e2;
+  border-radius: 10px;
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 80px;
+}
+.stat-chip.in-progress { background: #fef3c7; }
+.stat-chip.resolved { background: #d1fae5; }
+
+.stat-chip span { display: block; font-size: 22px; font-weight: 800; color: var(--text); }
+.stat-chip label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-size: 14px;
+  background: var(--card);
+}
+
+.search-input:focus { outline: none; border-color: var(--primary); }
+
+.filters-bar select, .ward-input {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-size: 14px;
+  background: var(--card);
+  color: var(--text);
+}
+
+.ward-input { width: 90px; }
+
+.view-toggle {
+  display: flex;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.view-toggle button {
+  padding: 8px 14px;
+  border: none;
+  background: var(--card);
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.view-toggle button.active { background: var(--primary); color: #fff; }
+
+.complaints-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.map-wrapper { margin-top: 8px; }
+.map-hint { font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center; }
+
+@media (max-width: 600px) {
+  .home-hero { flex-direction: column; }
+  .stats-row { width: 100%; justify-content: center; }
+}
