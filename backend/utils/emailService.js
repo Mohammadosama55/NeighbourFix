@@ -1,14 +1,17 @@
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: Number(process.env.EMAIL_PORT) || 587,
-  secure: process.env.EMAIL_SECURE === 'true',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Transporter is created lazily at call time so env vars are always loaded
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: Number(process.env.EMAIL_PORT) || 587,
+    secure: process.env.EMAIL_SECURE === 'true',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+}
 
 const categoryLabels = {
   road: '🛣️ Road',
@@ -162,7 +165,7 @@ export const sendEscalationEmail = async (complaint, pdfPath) => {
   };
 
   try {
-    const result = await transporter.sendMail(mailOptions);
+    const result = await createTransporter().sendMail(mailOptions);
     console.log(`Escalation email sent to ${recipients}`);
     return result;
   } catch (error) {
@@ -200,7 +203,7 @@ export const sendTestEmail = async () => {
 </body></html>`,
   };
 
-  const result = await transporter.sendMail(mailOptions);
+  const result = await createTransporter().sendMail(mailOptions);
   console.log(`Test email sent to ${recipients}`);
   return { success: true, sentTo: recipients, messageId: result.messageId };
 };
