@@ -112,3 +112,97 @@
   justify-content: flex-end;
   margin-top: 16px;
 }
+
+/* Email Config Panel */
+.email-config-panel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  background: linear-gradient(135deg, #fef0ed 0%, #fff8f5 100%);
+  border: 1.5px solid #fcd5c5;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.email-config-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.email-config-icon {
+  font-size: 28px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.email-config-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.email-config-info p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.email-config-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.btn-test-email {
+  background: #e8500a;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-test-email:hover:not(:disabled) { background: #c94008; }
+.btn-test-email:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.email-result {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 280px;
+  text-align: right;
+}
+
+.email-result.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.email-result.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.spinner-white {
+  border-color: rgba(255,255,255,0.3);
+  border-top-color: #fff;
+}

@@ -1,6 +1,6 @@
 import Complaint from '../models/Complaint.js';
 import User from '../models/User.js';
-import { sendEscalationEmail } from '../utils/emailService.js';
+import { sendEscalationEmail, sendTestEmail } from '../utils/emailService.js';
 import { generateComplaintPDF } from '../utils/pdfGenerator.js';
 
 // Resident-only create with file upload support
@@ -103,8 +103,9 @@ export const upvoteComplaint = async (req, res) => {
   complaint.upvotes = complaint.upvotedBy.length;
   await complaint.save();
 
-  // Trigger escalation email if upvotes reach threshold (e.g., 5 upvotes)
-  if (complaint.upvotes >= 5 && !complaint.escalated) {
+  // Trigger escalation email when upvotes reach threshold (10 as per project spec)
+  const ESCALATION_THRESHOLD = 10;
+  if (complaint.upvotes >= ESCALATION_THRESHOLD && !complaint.escalated) {
     try {
       const user = await User.findById(complaint.reportedBy);
       const pdfPath = await generateComplaintPDF(complaint, user);
@@ -160,6 +161,16 @@ export const updateStatus = async (req, res) => {
   }
 
   return res.json(complaint);
+};
+
+export const testEmailController = async (req, res) => {
+  try {
+    const result = await sendTestEmail();
+    return res.json(result);
+  } catch (error) {
+    console.error('Test email failed:', error.message);
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 export const resolveComplaint = async (req, res) => {

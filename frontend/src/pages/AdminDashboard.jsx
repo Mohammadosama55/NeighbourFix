@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   const [resolveModal, setResolveModal] = useState(null);
   const [resolveData, setResolveData] = useState({ notes: '', photos: [] });
   const [resolving, setResolving] = useState(false);
+  const [emailTest, setEmailTest] = useState({ loading: false, result: null, error: null });
 
   useEffect(() => { fetchComplaints(); }, [filters]);
 
@@ -62,6 +63,16 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleTestEmail = async () => {
+    setEmailTest({ loading: true, result: null, error: null });
+    try {
+      const res = await api.post('/complaints/admin/test-email');
+      setEmailTest({ loading: false, result: res.data, error: null });
+    } catch (err) {
+      setEmailTest({ loading: false, result: null, error: err.response?.data?.message || 'Failed to send test email' });
+    }
+  };
+
   const stats = {
     total: complaints.length,
     reported: complaints.filter(c => c.status === 'reported').length,
@@ -81,6 +92,38 @@ export default function AdminDashboard() {
           <div className="admin-stat warning"><span>{stats.in_progress}</span><label>In Progress</label></div>
           <div className="admin-stat success"><span>{stats.resolved}</span><label>Resolved</label></div>
           <div className="admin-stat escalated"><span>{stats.escalated}</span><label>Escalated</label></div>
+        </div>
+
+        {/* Email Configuration Panel */}
+        <div className="email-config-panel">
+          <div className="email-config-info">
+            <div className="email-config-icon">📧</div>
+            <div>
+              <h3>Escalation Email</h3>
+              <p>Complaints auto-escalate via email when they reach <strong>10 upvotes</strong>. Send a test to verify your email configuration is working.</p>
+            </div>
+          </div>
+          <div className="email-config-actions">
+            <button
+              className="btn btn-test-email"
+              onClick={handleTestEmail}
+              disabled={emailTest.loading}
+            >
+              {emailTest.loading
+                ? <><span className="spinner"></span> Sending…</>
+                : '🔔 Send Test Email'}
+            </button>
+            {emailTest.result && (
+              <div className="email-result success">
+                ✅ Test email sent to <strong>{emailTest.result.sentTo}</strong>
+              </div>
+            )}
+            {emailTest.error && (
+              <div className="email-result error">
+                ❌ {emailTest.error}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="admin-filters">

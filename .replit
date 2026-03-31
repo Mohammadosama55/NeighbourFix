@@ -11,6 +11,7 @@ channel = "stable-25_05"
 PORT = "3001"
 JWT_SECRET = "52bfb4b390715a45bacd1d8f333e064d534eb453fe9c88d93c305926d3a506dd"
 NODE_ENV = "development"
+FRONTEND_URL = "https://3119d1c2-3650-42b4-87a4-279634f098ee-00-2u2870ieqn7od.pike.replit.dev"
 
 [workflows]
 runButton = "Project"
@@ -32,17 +33,18 @@ args = "Backend API"
 name = "Start application"
 author = "agent"
 
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd frontend && npm run dev"
 waitForPort = 5000
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[workflows.workflow]]
 name = "Backend API"
 author = "agent"
+mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
