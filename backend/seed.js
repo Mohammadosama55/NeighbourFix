@@ -93,6 +93,33 @@ const otherComplaints = [
   { title: 'Community hall locked — not available to residents', description: 'The community hall that belongs to all residents is being controlled by a local group that locks it and charges for usage. We want free access as per municipal rules.' },
 ];
 
+// ── Real Indian civic issue photos (Wikimedia Commons, freely embeddable) ───
+const realPhotos = {
+  road: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Potholes_on_road.jpg/960px-Potholes_on_road.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Broken_Roads_in_India%27s_Capital_New_Delhi.jpg/960px-Broken_Roads_in_India%27s_Capital_New_Delhi.jpg',
+  ],
+  garbage: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Garbage_Disposal_Hyderabad_2005.jpg/960px-Garbage_Disposal_Hyderabad_2005.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Hyderabad_Street_Garbage_collection_2005.jpg/960px-Hyderabad_Street_Garbage_collection_2005.jpg',
+  ],
+  water: [
+    'https://upload.wikimedia.org/wikipedia/commons/e/eb/Waterlogged_are_of_Vill_Ratta_Kherra%2Cdistrict_Faridkot%2CPunjab%2CIndia%2C.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Water_supply_by_Firemen_after_Cyclone_Fani.jpg/960px-Water_supply_by_Firemen_after_Cyclone_Fani.jpg',
+  ],
+  drainage: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Drain_yet_to_build_%282%29.jpg/960px-Drain_yet_to_build_%282%29.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Open_sewer_%282731597018%29.jpg/960px-Open_sewer_%282731597018%29.jpg',
+  ],
+  power: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Overhead_Communication_Cables_-_Kolkata_2011-08-29_4821.JPG/960px-Overhead_Communication_Cables_-_Kolkata_2011-08-29_4821.JPG',
+  ],
+  other: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Stray_German_Shepherd_Dog.jpg/960px-Stray_German_Shepherd_Dog.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/The_watchful_stray-_grace_in_the_streets.jpg/960px-The_watchful_stray-_grace_in_the_streets.jpg',
+  ],
+};
+
 // ── Location data (Delhi/NCR spread) ────────────────────────────────────────
 const locations = [
   { area: 'Sector 14, Dwarka', coords: [77.0595, 28.5921] },
@@ -204,6 +231,12 @@ async function seed() {
       upvoterIds.push(allUsers[u]._id);
     }
 
+    // Assign real photos — cycle through the category's photo pool
+    const catPhotos = realPhotos[item.category] || [];
+    const photoPool = catPhotos.length > 0
+      ? [catPhotos[i % catPhotos.length]]
+      : [];
+
     const doc = {
       title: item.title,
       description: item.description,
@@ -221,7 +254,7 @@ async function seed() {
       escalated,
       escalationEmailSent: escalated,
       escalationDate: escalated ? createdAt : undefined,
-      photos: [],
+      photos: photoPool,
       createdAt,
       updatedAt: createdAt,
       ...(status === 'resolved' ? {
@@ -243,8 +276,13 @@ async function seed() {
     const wardNum = String(randomInt(1, 20));
     const createdAt = randomDate(180);
 
+    const fillerCatPhotos = realPhotos[base.category] || [];
+    const fillerPhoto = fillerCatPhotos.length > 0
+      ? [fillerCatPhotos[complaints.length % fillerCatPhotos.length]]
+      : [];
+
     complaints.push({
-      title: base.title + ' (Block ' + (complaints.length + 1) + ')',
+      title: base.title + ' (Area ' + (complaints.length + 1) + ')',
       description: base.description,
       category: base.category,
       wardNumber: wardNum,
@@ -259,7 +297,7 @@ async function seed() {
       reportedBy: reporter._id,
       escalated: upvotes >= 10,
       escalationEmailSent: upvotes >= 10,
-      photos: [],
+      photos: fillerPhoto,
       createdAt,
       updatedAt: createdAt,
     });
