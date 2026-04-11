@@ -7,7 +7,7 @@ import { dirname } from 'path';
 import authRoutes from './routes/auth.js';
 import complaintRoutes from './routes/complaints.js';
 
-dotenv.config();
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

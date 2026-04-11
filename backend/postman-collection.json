@@ -1,0 +1,354 @@
+{
+  "info": {
+    "name": "NeighbourFix API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth API",
+      "item": [
+        {
+          "name": "Register Resident",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Resident\",\n  \"email\": \"john@test.com\",\n  \"password\": \"Password123!\",\n  \"phone\": \"9876543210\",\n  \"role\": \"resident\",\n  \"wardNumber\": \"10\",\n  \"address\": \"123 Main Street\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin Officer\",\n  \"email\": \"admin@municipality.gov\",\n  \"password\": \"AdminPass123!\",\n  \"phone\": \"1234567890\",\n  \"role\": \"ward_admin\",\n  \"wardNumber\": \"10\",\n  \"address\": \"Municipal Office\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@test.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_TOKEN_HERE"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9999999999\",\n  \"address\": \"456 New Street\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Complaint API",
+      "item": [
+        {
+          "name": "Create Complaint (with Photo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_RESIDENT_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Pothole on Main Street"
+                },
+                {
+                  "key": "description",
+                  "value": "Large dangerous pothole causing traffic hazard"
+                },
+                {
+                  "key": "category",
+                  "value": "road"
+                },
+                {
+                  "key": "wardNumber",
+                  "value": "10"
+                },
+                {
+                  "key": "address",
+                  "value": "Main Street, Bangalore"
+                },
+                {
+                  "key": "location",
+                  "value": "{\"coordinates\": [77.5994, 12.9716]}"
+                },
+                {
+                  "key": "photos",
+                  "type": "file",
+                  "src": "UPLOAD_IMAGE_FILE_HERE"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/complaints",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints"]
+            }
+          }
+        },
+        {
+          "name": "Get All Complaints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/complaints",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints"]
+            }
+          }
+        },
+        {
+          "name": "Get Complaint By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/complaints/PASTE_COMPLAINT_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints", "PASTE_COMPLAINT_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Get Nearby Complaints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/complaints/nearby?lat=12.9716&lng=77.5994&radius=5000",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints", "nearby"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "12.9716"
+                },
+                {
+                  "key": "lng",
+                  "value": "77.5994"
+                },
+                {
+                  "key": "radius",
+                  "value": "5000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upvote Complaint",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/complaints/PASTE_COMPLAINT_ID_HERE/upvote",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints", "PASTE_COMPLAINT_ID_HERE", "upvote"]
+            }
+          }
+        },
+        {
+          "name": "Get Heatmap Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/complaints/heatmap",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints", "heatmap"]
+            }
+          }
+        },
+        {
+          "name": "Update Status (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_ADMIN_TOKEN_HERE"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/complaints/PASTE_COMPLAINT_ID_HERE/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints", "PASTE_COMPLAINT_ID_HERE", "status"]
+            }
+          }
+        },
+        {
+          "name": "Resolve Complaint (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer PASTE_ADMIN_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "resolutionNotes",
+                  "value": "Pothole filled with asphalt"
+                },
+                {
+                  "key": "resolutionPhotos",
+                  "type": "file",
+                  "src": "UPLOAD_BEFORE_AFTER_PHOTOS"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/complaints/PASTE_COMPLAINT_ID_HERE/resolve",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "complaints", "PASTE_COMPLAINT_ID_HERE", "resolve"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
