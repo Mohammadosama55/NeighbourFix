@@ -348,33 +348,45 @@
 .sbar-item.s-green  .sbar-num { color: var(--primary); }
 
 /* ══════════════════════════════════
-   STEP 4 — COMPLAINTS SECTION
+   STEP 4 — DEDICATED COMPLAINTS SECTION
 ══════════════════════════════════ */
-.complaints-section {
-  max-width: 1160px; margin: 0 auto;
-  padding: 40px 24px 72px;
+.complaints-dedicated {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 64px 0 72px;
 }
 
-.complaints-section-header {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 12px;
-  margin-bottom: 22px; flex-wrap: wrap;
+.complaints-section-intro {
+  max-width: 1160px; margin: 0 auto 36px;
+  padding: 0 24px;
+  text-align: center;
 }
 
-.complaints-section-header h2 {
-  font-size: 22px; font-weight: 800; color: var(--text);
-  letter-spacing: -.02em;
+.complaints-section-intro h2 {
+  font-size: 34px; font-weight: 800;
+  color: var(--text); letter-spacing: -.02em;
+  margin-bottom: 12px;
 }
-.complaints-section-header h2 span { color: var(--primary); }
+
+.ward-highlight { color: var(--primary); }
+
+.complaints-section-intro .section-sub {
+  max-width: 520px; margin: 0 auto 18px;
+}
 
 .clear-ward-btn {
   background: var(--red-light); color: var(--red);
   border: 1.5px solid #fca5a5;
-  border-radius: 8px; padding: 6px 13px;
+  border-radius: 8px; padding: 7px 16px;
   font-size: 13px; font-weight: 700; cursor: pointer;
-  transition: background .15s;
+  transition: background .15s; display: inline-block;
 }
 .clear-ward-btn:hover { background: #fecaca; }
+
+.complaints-section-body {
+  max-width: 1160px; margin: 0 auto;
+  padding: 0 24px;
+}
 
 /* Filters */
 .filters-bar {

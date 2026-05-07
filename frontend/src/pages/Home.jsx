@@ -251,18 +251,23 @@ export default function Home() {
       {/* ══════════════════════════
           STEP 4 — COMPLAINTS LIST
          ══════════════════════════ */}
-      <div id="complaints" ref={complaintsRef} className="complaints-section">
-        <div className="complaints-section-header">
+      <section id="complaints" ref={complaintsRef} className="complaints-dedicated">
+        <div className="complaints-section-intro">
+          <p className="section-eyebrow">Live Reports</p>
           <h2>
             {filters.wardNumber
-              ? <>Issues in <span>Ward {filters.wardNumber}</span></>
+              ? <>Issues in <span className="ward-highlight">Ward {filters.wardNumber}</span></>
               : 'All Civic Complaints'}
           </h2>
+          <p className="section-sub">
+            Real complaints filed by residents across wards — filtered, searchable, and updated live.
+          </p>
           {filters.wardNumber && (
-            <button className="clear-ward-btn" onClick={clearWardFilter}>Clear filter ✕</button>
+            <button className="clear-ward-btn" onClick={clearWardFilter}>Clear Ward filter ✕</button>
           )}
         </div>
 
+        <div className="complaints-section-body">
         <div className="filters-bar">
           <div className="search-wrap">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -326,7 +331,8 @@ export default function Home() {
             )}
           </>
         )}
-      </div>
+        </div>
+      </section>
 
       {/* ── ABOUT SECTION ── */}
       <section id="about" className="about-section">
