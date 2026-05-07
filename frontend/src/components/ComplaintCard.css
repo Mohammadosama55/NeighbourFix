@@ -2,11 +2,11 @@
   display: flex; flex-direction: column;
   background: var(--card);
   border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  border: 1.5px solid var(--border);
   overflow: hidden;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
   color: inherit;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
 }
 
 .cc-card:hover {
@@ -17,7 +17,7 @@
 
 /* Image */
 .cc-img {
-  position: relative; height: 172px; overflow: hidden;
+  position: relative; height: 180px; overflow: hidden;
   background: var(--bg-alt);
 }
 
@@ -30,22 +30,22 @@
 
 .cc-no-img {
   position: relative;
-  height: 80px;
+  height: 72px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 32px;
+  font-size: 28px;
   border-bottom: 1px solid var(--border);
 }
 
 .cc-esc {
   position: absolute; top: 10px; right: 10px;
-  background: rgba(220,38,38,.9); color: #fff;
+  background: rgba(220,38,38,.88); color: #fff;
   font-size: 11px; font-weight: 700;
   padding: 3px 9px; border-radius: 99px;
   backdrop-filter: blur(4px);
 }
 
 /* Body */
-.cc-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.cc-body { padding: 16px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
 
 .cc-meta-row {
   display: flex; align-items: center;
@@ -53,9 +53,9 @@
 }
 
 .cc-cat {
-  font-size: 12px; font-weight: 700;
+  font-size: 11px; font-weight: 700;
   padding: 3px 9px; border-radius: 99px;
-  text-transform: capitalize; letter-spacing: .01em;
+  text-transform: capitalize; letter-spacing: .02em;
 }
 
 .cc-status {
@@ -78,11 +78,11 @@
 
 .cc-loc {
   display: flex; align-items: center; gap: 5px;
-  font-size: 13px; color: var(--muted);
+  font-size: 12px; color: var(--muted);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.cc-loc svg { flex-shrink: 0; color: var(--primary); }
+.cc-loc svg { flex-shrink: 0; color: var(--muted-2); }
 
 .cc-footer {
   display: flex; justify-content: space-between; align-items: center;
@@ -92,11 +92,9 @@
 
 .cc-upvotes {
   display: flex; align-items: center; gap: 5px;
-  font-size: 13px; font-weight: 700; color: var(--primary);
+  font-size: 12px; font-weight: 700; color: var(--primary);
   background: var(--primary-light);
   padding: 3px 10px; border-radius: 99px;
 }
 
-.cc-time {
-  font-size: 12px; color: var(--muted);
-}
+.cc-time { font-size: 12px; color: var(--muted-2); }

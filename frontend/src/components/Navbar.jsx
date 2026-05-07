@@ -9,12 +9,7 @@ export default function Navbar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-    setMenuOpen(false);
-  };
-
+  const handleLogout = () => { logout(); navigate('/'); setMenuOpen(false); };
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -36,12 +31,12 @@ export default function Navbar() {
           {user ? (
             <>
               {user.role === 'resident' && (
-                <Link to="/create" className={`btn btn-primary btn-sm ${isActive('/create') ? 'active' : ''}`} onClick={() => setMenuOpen(false)}>
+                <Link to="/create" className="btn btn-primary btn-sm" style={{ marginLeft: 8 }} onClick={() => setMenuOpen(false)}>
                   + Report Issue
                 </Link>
               )}
               {user.role === 'ward_admin' && (
-                <Link to="/admin" className={`btn btn-secondary btn-sm ${isActive('/admin') ? 'active' : ''}`} onClick={() => setMenuOpen(false)}>
+                <Link to="/admin" className="btn btn-primary btn-sm" style={{ marginLeft: 8 }} onClick={() => setMenuOpen(false)}>
                   Dashboard
                 </Link>
               )}
@@ -62,7 +57,7 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/login" className={isActive('/login') ? 'active' : ''} onClick={() => setMenuOpen(false)}>Login</Link>
-              <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+              <Link to="/register" className="btn btn-primary btn-sm" style={{ marginLeft: 8 }} onClick={() => setMenuOpen(false)}>Sign Up</Link>
             </>
           )}
         </div>

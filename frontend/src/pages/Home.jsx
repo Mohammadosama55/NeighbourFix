@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 import ComplaintCard from '../components/ComplaintCard';
 import MapView from '../components/MapView';
@@ -9,6 +10,7 @@ const CATEGORIES = ['all', 'road', 'water', 'garbage', 'drainage', 'power', 'oth
 const STATUSES = ['all', 'reported', 'in_progress', 'resolved', 'rejected'];
 
 export default function Home() {
+  const { user } = useAuth();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('list');
@@ -39,10 +41,10 @@ export default function Home() {
     (c.address || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const total     = complaints.length;
-  const reported  = complaints.filter(c => c.status === 'reported').length;
-  const inProgress= complaints.filter(c => c.status === 'in_progress').length;
-  const resolved  = complaints.filter(c => c.status === 'resolved').length;
+  const total      = complaints.length;
+  const reported   = complaints.filter(c => c.status === 'reported').length;
+  const inProgress = complaints.filter(c => c.status === 'in_progress').length;
+  const resolved   = complaints.filter(c => c.status === 'resolved').length;
 
   return (
     <div className="home-page">
@@ -50,10 +52,22 @@ export default function Home() {
       <div className="home-hero">
         <div className="container">
           <div className="hero-inner">
-            <div className="hero-text">
-              <h1>Civic Complaints<br /><span>in Your Neighbourhood</span></h1>
-              <p>Report issues, upvote problems, hold your ward accountable.</p>
+            <div className="hero-left">
+              <div className="hero-eyebrow">🇮🇳 Civic Platform for Indian Residents</div>
+              <h1>Report Local Issues.<br /><span>Hold Your Ward Accountable.</span></h1>
+              <p>Report civic problems, upvote community issues, and track resolution progress in your neighbourhood.</p>
+              <div className="hero-cta">
+                {user ? (
+                  <Link to="/create" className="btn btn-primary btn-lg">+ Report an Issue</Link>
+                ) : (
+                  <>
+                    <Link to="/register" className="btn btn-primary btn-lg">Get Started →</Link>
+                    <Link to="/heatmap" className="btn btn-outline btn-lg">View Heatmap</Link>
+                  </>
+                )}
+              </div>
             </div>
+
             <div className="hero-stats">
               <div className="hstat s-orange">
                 <span className="hstat-num">{reported}</span>
@@ -84,12 +98,8 @@ export default function Home() {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
-              <input
-                className="search-input"
-                placeholder="Search complaints…"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
+              <input className="search-input" placeholder="Search complaints…"
+                value={search} onChange={e => setSearch(e.target.value)} />
             </div>
 
             <select className="filter-select" value={filters.category}
@@ -108,16 +118,11 @@ export default function Home() {
 
             <input className="ward-input" placeholder="Ward #"
               value={filters.wardNumber}
-              onChange={e => setFilters({ ...filters, wardNumber: e.target.value })}
-            />
+              onChange={e => setFilters({ ...filters, wardNumber: e.target.value })} />
 
             <div className="view-toggle">
-              <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>
-                ☰ List
-              </button>
-              <button className={viewMode === 'map' ? 'active' : ''} onClick={() => setViewMode('map')}>
-                🗺 Map
-              </button>
+              <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>☰ List</button>
+              <button className={viewMode === 'map' ? 'active' : ''} onClick={() => setViewMode('map')}>🗺 Map</button>
             </div>
           </div>
         </div>
@@ -126,7 +131,7 @@ export default function Home() {
         {viewMode === 'map' ? (
           <div className="map-wrapper">
             <MapView complaints={filtered} height="520px" />
-            <p className="map-hint">{filtered.length} complaints shown</p>
+            <p className="map-hint">{filtered.length} complaints shown on map</p>
           </div>
         ) : (
           <>

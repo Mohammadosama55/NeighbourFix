@@ -29,11 +29,11 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card card" style={{ maxWidth: 480 }}>
+      <div className="auth-card" style={{ maxWidth: 480 }}>
         <div className="auth-header">
-          <span className="auth-icon">📍</span>
-          <h1>NeighbourFix</h1>
-          <p>Create your account</p>
+          <div className="auth-icon">📍</div>
+          <h1>Create account</h1>
+          <p>Join NeighbourFix and make your city better</p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -85,7 +85,7 @@ export default function Register() {
 
           {error && <p className="error-msg" style={{ marginBottom: 12 }}>{error}</p>}
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '11px', fontSize: 15, justifyContent: 'center' }} disabled={loading}>
             {loading ? <span className="spinner"></span> : 'Create Account'}
           </button>
         </form>
