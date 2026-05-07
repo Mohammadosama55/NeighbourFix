@@ -7,15 +7,17 @@ import MapView from '../components/MapView';
 import './Home.css';
 
 const CATEGORIES = ['all', 'road', 'water', 'garbage', 'drainage', 'power', 'other'];
-const STATUSES = ['all', 'reported', 'in_progress', 'resolved', 'rejected'];
+const STATUSES   = ['all', 'reported', 'in_progress', 'resolved', 'rejected'];
+
+const HERO_IMAGE = 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=900&q=80';
 
 export default function Home() {
   const { user } = useAuth();
   const [complaints, setComplaints] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('list');
-  const [filters, setFilters] = useState({ category: 'all', status: 'all', wardNumber: '' });
-  const [search, setSearch] = useState('');
+  const [loading, setLoading]       = useState(true);
+  const [viewMode, setViewMode]     = useState('list');
+  const [filters, setFilters]       = useState({ category: 'all', status: 'all', wardNumber: '' });
+  const [search, setSearch]         = useState('');
 
   useEffect(() => { fetchComplaints(); }, [filters]);
 
@@ -24,8 +26,8 @@ export default function Home() {
     try {
       const params = {};
       if (filters.category !== 'all') params.category = filters.category;
-      if (filters.status !== 'all') params.status = filters.status;
-      if (filters.wardNumber) params.wardNumber = filters.wardNumber;
+      if (filters.status   !== 'all') params.status   = filters.status;
+      if (filters.wardNumber)         params.wardNumber = filters.wardNumber;
       const res = await api.get('/complaints', { params });
       setComplaints(res.data);
     } catch (err) {
@@ -35,7 +37,7 @@ export default function Home() {
     }
   };
 
-  const filtered = complaints.filter(c =>
+  const filtered   = complaints.filter(c =>
     !search ||
     c.title.toLowerCase().includes(search.toLowerCase()) ||
     (c.address || '').toLowerCase().includes(search.toLowerCase())
@@ -48,86 +50,128 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      {/* Hero */}
-      <div className="home-hero">
+
+      {/* ── HERO ── */}
+      <section className="home-hero">
         <div className="container">
           <div className="hero-inner">
+
+            {/* Left: content */}
             <div className="hero-left">
               <div className="hero-eyebrow">🇮🇳 Civic Platform for Indian Residents</div>
-              <h1>Report Local Issues.<br /><span>Hold Your Ward Accountable.</span></h1>
-              <p>Report civic problems, upvote community issues, and track resolution progress in your neighbourhood.</p>
+
+              <h1>
+                Report Local Issues.<br />
+                <span>Make Your City Better.</span>
+              </h1>
+
+              <p className="hero-sub">
+                NeighbourFix helps citizens report and track local civic issues like potholes, broken lights, and garbage collection. Join thousands making their communities better.
+              </p>
+
               <div className="hero-cta">
                 {user ? (
-                  <Link to="/create" className="btn btn-primary btn-lg">+ Report an Issue</Link>
+                  <Link to="/create" className="btn-primary-lg">Get Started →</Link>
                 ) : (
                   <>
-                    <Link to="/register" className="btn btn-primary btn-lg">Get Started →</Link>
-                    <Link to="/heatmap" className="btn btn-outline btn-lg">View Heatmap</Link>
+                    <Link to="/register" className="btn-primary-lg">Get Started →</Link>
+                    <a href="#complaints" className="btn-outline-lg">
+                      <span className="play-icon">▶</span>
+                      Watch Demo
+                    </a>
                   </>
                 )}
               </div>
+
+              <div className="hero-social-proof">
+                <div className="stars">
+                  <span className="star full">★</span>
+                  <span className="star full">★</span>
+                  <span className="star full">★</span>
+                  <span className="star full">★</span>
+                  <span className="star half">★</span>
+                </div>
+                <span className="proof-text"><strong>4.8/5</strong> from 2,500+ users</span>
+              </div>
             </div>
 
-            <div className="hero-stats">
-              <div className="hstat s-orange">
-                <span className="hstat-num">{reported}</span>
-                <span className="hstat-label">Reported</span>
-              </div>
-              <div className="hstat s-amber">
-                <span className="hstat-num">{inProgress}</span>
-                <span className="hstat-label">In Progress</span>
-              </div>
-              <div className="hstat s-green">
-                <span className="hstat-num">{resolved}</span>
-                <span className="hstat-label">Resolved</span>
-              </div>
-              <div className="hstat">
-                <span className="hstat-num">{total}</span>
-                <span className="hstat-label">Total</span>
+            {/* Right: city image */}
+            <div className="hero-right">
+              <div className="hero-img-wrap">
+                <img
+                  src={HERO_IMAGE}
+                  alt="City skyline — NeighbourFix civic platform"
+                  loading="eager"
+                />
+                <div className="live-demo-badge">
+                  <span className="live-dot"></span>
+                  Live Demo
+                </div>
               </div>
             </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── STATS BAR ── */}
+      <div className="stats-bar">
+        <div className="stats-bar-inner">
+          <div className="sbar-item s-orange">
+            <span className="sbar-num">{reported}</span>
+            <span className="sbar-label">Reported</span>
+          </div>
+          <div className="sbar-item s-amber">
+            <span className="sbar-num">{inProgress}</span>
+            <span className="sbar-label">In Progress</span>
+          </div>
+          <div className="sbar-item s-green">
+            <span className="sbar-num">{resolved}</span>
+            <span className="sbar-label">Resolved</span>
+          </div>
+          <div className="sbar-item">
+            <span className="sbar-num">{total}</span>
+            <span className="sbar-label">Total Issues</span>
           </div>
         </div>
       </div>
 
-      <div className="container">
+      {/* ── COMPLAINTS SECTION ── */}
+      <div id="complaints" className="complaints-section">
         {/* Filters */}
-        <div className="filters-section">
-          <div className="filters-bar">
-            <div className="search-wrap">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input className="search-input" placeholder="Search complaints…"
-                value={search} onChange={e => setSearch(e.target.value)} />
-            </div>
+        <div className="filters-bar">
+          <div className="search-wrap">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input className="search-input" placeholder="Search complaints…"
+              value={search} onChange={e => setSearch(e.target.value)} />
+          </div>
 
-            <select className="filter-select" value={filters.category}
-              onChange={e => setFilters({ ...filters, category: e.target.value })}>
-              {CATEGORIES.map(c => (
-                <option key={c} value={c}>{c === 'all' ? 'All Categories' : c.charAt(0).toUpperCase() + c.slice(1)}</option>
-              ))}
-            </select>
+          <select className="filter-select" value={filters.category}
+            onChange={e => setFilters({ ...filters, category: e.target.value })}>
+            {CATEGORIES.map(c => (
+              <option key={c} value={c}>{c === 'all' ? 'All Categories' : c.charAt(0).toUpperCase() + c.slice(1)}</option>
+            ))}
+          </select>
 
-            <select className="filter-select" value={filters.status}
-              onChange={e => setFilters({ ...filters, status: e.target.value })}>
-              {STATUSES.map(s => (
-                <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
-              ))}
-            </select>
+          <select className="filter-select" value={filters.status}
+            onChange={e => setFilters({ ...filters, status: e.target.value })}>
+            {STATUSES.map(s => (
+              <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
+            ))}
+          </select>
 
-            <input className="ward-input" placeholder="Ward #"
-              value={filters.wardNumber}
-              onChange={e => setFilters({ ...filters, wardNumber: e.target.value })} />
+          <input className="ward-input" placeholder="Ward #"
+            value={filters.wardNumber}
+            onChange={e => setFilters({ ...filters, wardNumber: e.target.value })} />
 
-            <div className="view-toggle">
-              <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>☰ List</button>
-              <button className={viewMode === 'map' ? 'active' : ''} onClick={() => setViewMode('map')}>🗺 Map</button>
-            </div>
+          <div className="view-toggle">
+            <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>☰ List</button>
+            <button className={viewMode === 'map'  ? 'active' : ''} onClick={() => setViewMode('map')}>🗺 Map</button>
           </div>
         </div>
 
-        {/* Results */}
         {viewMode === 'map' ? (
           <div className="map-wrapper">
             <MapView complaints={filtered} height="520px" />
@@ -160,6 +204,40 @@ export default function Home() {
           </>
         )}
       </div>
+
+      {/* ── ABOUT SECTION ── */}
+      <section id="about" className="about-section">
+        <div className="about-inner">
+          <p className="about-label">About NeighbourFix</p>
+          <h2>Making civic accountability<br />accessible to everyone</h2>
+          <p>
+            We built NeighbourFix so every resident has a voice. Report issues, rally community upvotes, and watch your ward authorities respond — all in one transparent platform.
+          </p>
+          <div className="about-features">
+            <div className="about-feat">
+              <div className="about-feat-icon">📍</div>
+              <h3>GPS-Pinned Reports</h3>
+              <p>Pin the exact location of any issue on an interactive map so authorities know precisely where to act.</p>
+            </div>
+            <div className="about-feat">
+              <div className="about-feat-icon">▲</div>
+              <h3>Community Upvoting</h3>
+              <p>Neighbours upvote issues they care about. High-priority complaints auto-escalate to ward officers at 10 votes.</p>
+            </div>
+            <div className="about-feat">
+              <div className="about-feat-icon">📊</div>
+              <h3>Ward Heatmap</h3>
+              <p>A public accountability dashboard showing resolution rates ward-by-ward. No more hiding poor performance.</p>
+            </div>
+            <div className="about-feat">
+              <div className="about-feat-icon">📧</div>
+              <h3>Auto Escalation</h3>
+              <p>When an issue reaches the threshold, a formal PDF complaint letter is emailed directly to your ward officer.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
