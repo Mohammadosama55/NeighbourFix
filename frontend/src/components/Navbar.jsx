@@ -17,11 +17,11 @@ export default function Navbar() {
     e.preventDefault();
     close();
     if (location.pathname === '/') {
-      document.getElementById('complaints')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('complaints')?.scrollIntoView({ behavior: 'instant', block: 'start' });
     } else {
       navigate('/');
       setTimeout(() => {
-        document.getElementById('complaints')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('complaints')?.scrollIntoView({ behavior: 'instant', block: 'start' });
       }, 350);
     }
   };
