@@ -1,83 +1,45 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-import ComplaintCard from '../components/ComplaintCard';
-import MapView from '../components/MapView';
 import './Home.css';
 
-const CATEGORIES = ['all', 'road', 'water', 'garbage', 'drainage', 'power', 'other'];
-const STATUSES   = ['all', 'reported', 'in_progress', 'resolved', 'rejected'];
 const CAT_ICONS  = { road:'🛣️', water:'💧', garbage:'🗑️', drainage:'🚿', power:'⚡', other:'📋' };
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=900&q=80';
 
 export default function Home() {
   const { user } = useAuth();
-  const complaintsRef = useRef(null);
+  const navigate  = useNavigate();
 
-  const [complaints, setComplaints] = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [viewMode, setViewMode]     = useState('list');
-  const [filters, setFilters]       = useState({ category: 'all', status: 'all', wardNumber: '' });
-  const [search, setSearch]         = useState('');
-  const [wardInput, setWardInput]   = useState('');
+  const [liveFeed, setLiveFeed]   = useState([]);
+  const [stats, setStats]         = useState({ total: 0, reported: 0, inProgress: 0, resolved: 0 });
+  const [wardInput, setWardInput] = useState('');
 
-  useEffect(() => { fetchComplaints(); }, [filters]);
+  useEffect(() => {
+    api.get('/complaints').then(res => {
+      const all = res.data;
+      setStats({
+        total:      all.length,
+        reported:   all.filter(c => c.status === 'reported').length,
+        inProgress: all.filter(c => c.status === 'in_progress').length,
+        resolved:   all.filter(c => c.status === 'resolved').length,
+      });
+      setLiveFeed([...all].filter(c => c.status === 'resolved').slice(0, 3));
+    }).catch(() => {});
+  }, []);
 
-  const fetchComplaints = async () => {
-    setLoading(true);
-    try {
-      const params = {};
-      if (filters.category !== 'all') params.category = filters.category;
-      if (filters.status   !== 'all') params.status   = filters.status;
-      if (filters.wardNumber)         params.wardNumber = filters.wardNumber;
-      const res = await api.get('/complaints', { params });
-      setComplaints(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // "Check My Area" — apply ward filter and scroll to complaints
   const handleWardSearch = (e) => {
     e.preventDefault();
     const ward = wardInput.trim();
     if (!ward) return;
-    setFilters(f => ({ ...f, wardNumber: ward }));
-    setTimeout(() => {
-      complaintsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 80);
+    navigate(`/complaints?ward=${encodeURIComponent(ward)}`);
   };
-
-  const clearWardFilter = () => {
-    setWardInput('');
-    setFilters(f => ({ ...f, wardNumber: '' }));
-  };
-
-  const filtered = complaints.filter(c =>
-    !search ||
-    c.title.toLowerCase().includes(search.toLowerCase()) ||
-    (c.address || '').toLowerCase().includes(search.toLowerCase())
-  );
-
-  // Live feed: 3 most recently resolved complaints
-  const allComplaints = complaints.length === 0 ? [] : complaints;
-  const liveFeed = [...allComplaints]
-    .filter(c => c.status === 'resolved')
-    .slice(0, 3);
-
-  const total      = complaints.length;
-  const reported   = complaints.filter(c => c.status === 'reported').length;
-  const inProgress = complaints.filter(c => c.status === 'in_progress').length;
-  const resolved   = complaints.filter(c => c.status === 'resolved').length;
 
   return (
     <div className="home-page">
 
       {/* ══════════════════════════
-          STEP 1 — HERO (The Vision)
+          STEP 1 — HERO
          ══════════════════════════ */}
       <section className="home-hero">
         <div className="container">
@@ -103,7 +65,7 @@ export default function Home() {
                     <Link to="/register" className="btn-primary-lg">Get Started →</Link>
                     <a href="#how-it-works" className="btn-outline-lg">
                       <span className="play-icon">▶</span>
-                      Watch Demo
+                      How It Works
                     </a>
                   </>
                 )}
@@ -118,7 +80,7 @@ export default function Home() {
                 <span className="proof-text"><strong>4.8/5</strong> from 2,500+ users</span>
               </div>
 
-              {/* ── LIVE FEED ── */}
+              {/* ── Live Feed ── */}
               {liveFeed.length > 0 && (
                 <div className="live-feed">
                   <div className="live-feed-header">
@@ -193,7 +155,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── CHECK MY AREA HOOK ── */}
+          {/* ── Check My Area ── */}
           <div className="ward-hook">
             <div className="ward-hook-content">
               <div className="ward-hook-icon">🔍</div>
@@ -214,12 +176,6 @@ export default function Home() {
                 See Issues Near Me →
               </button>
             </form>
-            {filters.wardNumber && (
-              <div className="ward-active-tag">
-                Filtered: Ward {filters.wardNumber}
-                <button onClick={clearWardFilter}>✕ Clear</button>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -230,111 +186,27 @@ export default function Home() {
       <div className="stats-bar">
         <div className="stats-bar-inner">
           <div className="sbar-item s-orange">
-            <span className="sbar-num">{reported}</span>
+            <span className="sbar-num">{stats.reported}</span>
             <span className="sbar-label">Reported</span>
           </div>
           <div className="sbar-item s-amber">
-            <span className="sbar-num">{inProgress}</span>
+            <span className="sbar-num">{stats.inProgress}</span>
             <span className="sbar-label">In Progress</span>
           </div>
           <div className="sbar-item s-green">
-            <span className="sbar-num">{resolved}</span>
+            <span className="sbar-num">{stats.resolved}</span>
             <span className="sbar-label">Resolved</span>
           </div>
           <div className="sbar-item">
-            <span className="sbar-num">{total}</span>
+            <span className="sbar-num">{stats.total}</span>
             <span className="sbar-label">Total Issues</span>
           </div>
         </div>
       </div>
 
       {/* ══════════════════════════
-          STEP 4 — COMPLAINTS LIST
+          ABOUT SECTION
          ══════════════════════════ */}
-      <section id="complaints" ref={complaintsRef} className="complaints-dedicated">
-        <div className="complaints-section-intro">
-          <p className="section-eyebrow">Live Reports</p>
-          <h2>
-            {filters.wardNumber
-              ? <>Issues in <span className="ward-highlight">Ward {filters.wardNumber}</span></>
-              : 'All Civic Complaints'}
-          </h2>
-          <p className="section-sub">
-            Real complaints filed by residents across wards — filtered, searchable, and updated live.
-          </p>
-          {filters.wardNumber && (
-            <button className="clear-ward-btn" onClick={clearWardFilter}>Clear Ward filter ✕</button>
-          )}
-        </div>
-
-        <div className="complaints-section-body">
-        <div className="filters-bar">
-          <div className="search-wrap">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input className="search-input" placeholder="Search complaints…"
-              value={search} onChange={e => setSearch(e.target.value)} />
-          </div>
-
-          <select className="filter-select" value={filters.category}
-            onChange={e => setFilters({ ...filters, category: e.target.value })}>
-            {CATEGORIES.map(c => (
-              <option key={c} value={c}>{c === 'all' ? 'All Categories' : c.charAt(0).toUpperCase() + c.slice(1)}</option>
-            ))}
-          </select>
-
-          <select className="filter-select" value={filters.status}
-            onChange={e => setFilters({ ...filters, status: e.target.value })}>
-            {STATUSES.map(s => (
-              <option key={s} value={s}>{s === 'all' ? 'All Statuses' : s.replace('_', ' ')}</option>
-            ))}
-          </select>
-
-          <input className="ward-input" placeholder="Ward #"
-            value={filters.wardNumber}
-            onChange={e => setFilters({ ...filters, wardNumber: e.target.value })} />
-
-          <div className="view-toggle">
-            <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>☰ List</button>
-            <button className={viewMode === 'map'  ? 'active' : ''} onClick={() => setViewMode('map')}>🗺 Map</button>
-          </div>
-        </div>
-
-        {viewMode === 'map' ? (
-          <div className="map-wrapper">
-            <MapView complaints={filtered} height="520px" />
-            <p className="map-hint">{filtered.length} complaints shown on map</p>
-          </div>
-        ) : (
-          <>
-            <div className="results-header">
-              <p className="results-count">
-                Showing <strong>{filtered.length}</strong> complaint{filtered.length !== 1 ? 's' : ''}
-              </p>
-            </div>
-            {loading ? (
-              <div className="loading-page">
-                <div className="spinner spinner-dark"></div>
-                <p>Loading complaints…</p>
-              </div>
-            ) : filtered.length === 0 ? (
-              <div className="empty-state">
-                <div style={{ fontSize: 52, marginBottom: 14 }}>📭</div>
-                <h3>No complaints found</h3>
-                <p>Try adjusting your filters or be the first to report an issue in your ward.</p>
-              </div>
-            ) : (
-              <div className="complaints-grid">
-                {filtered.map(c => <ComplaintCard key={c._id} complaint={c} />)}
-              </div>
-            )}
-          </>
-        )}
-        </div>
-      </section>
-
-      {/* ── ABOUT SECTION ── */}
       <section id="about" className="about-section">
         <div className="about-inner">
           <p className="about-label">About NeighbourFix</p>

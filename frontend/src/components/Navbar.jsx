@@ -13,18 +13,6 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
   const close = () => setMenuOpen(false);
 
-  const handleComplaintsClick = (e) => {
-    e.preventDefault();
-    close();
-    if (location.pathname === '/') {
-      document.getElementById('complaints')?.scrollIntoView({ behavior: 'instant', block: 'start' });
-    } else {
-      navigate('/');
-      setTimeout(() => {
-        document.getElementById('complaints')?.scrollIntoView({ behavior: 'instant', block: 'start' });
-      }, 350);
-    }
-  };
 
   return (
     <nav className="navbar">
@@ -47,7 +35,7 @@ export default function Navbar() {
 
         {/* CENTER: Main nav links */}
         <div className={`navbar-center ${menuOpen ? 'open' : ''}`}>
-          <a href="/#complaints" className={`nav-link ${isActive('/') ? 'active' : ''}`} onClick={handleComplaintsClick}>Complaints</a>
+          <Link to="/complaints" className={`nav-link ${isActive('/complaints') ? 'active' : ''}`} onClick={close}>Complaints</Link>
           <Link to="/heatmap" className={`nav-link ${isActive('/heatmap') ? 'active' : ''}`} onClick={close}>Heatmap</Link>
           <a href="#about" className="nav-link" onClick={close}>About</a>
           {user?.role === 'ward_admin' && (
