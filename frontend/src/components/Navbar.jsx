@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationsContext';
@@ -14,6 +14,13 @@ export default function Navbar() {
   const [menuOpen,     setMenuOpen]     = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [sosOpen,      setSosOpen]      = useState(false);
+  const [scrolled,     setScrolled]     = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleLogout = () => { logout(); navigate('/'); setMenuOpen(false); };
   const isActive = (path) => location.pathname === path;
@@ -21,7 +28,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar">
+      <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
         <div className="navbar-inner">
 
           {/* LEFT: Brand */}

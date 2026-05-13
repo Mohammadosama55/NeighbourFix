@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ScrollReveal from '../components/ScrollReveal';
 import api from '../api/axios';
 import './Home.css';
 
@@ -40,14 +41,16 @@ const SEED_TESTIMONIALS = [
   },
 ];
 
+const STAGGER_DELAYS = [0, 80, 160, 240, 320, 400];
+
 export default function Home() {
   const { user } = useAuth();
   const navigate  = useNavigate();
 
-  const [liveFeed,      setLiveFeed]      = useState([]);
-  const [stats,         setStats]         = useState({ total: 0, reported: 0, inProgress: 0, resolved: 0 });
-  const [wardInput,     setWardInput]     = useState('');
-  const [testimonials,  setTestimonials]  = useState(SEED_TESTIMONIALS);
+  const [liveFeed,     setLiveFeed]     = useState([]);
+  const [stats,        setStats]        = useState({ total: 0, reported: 0, inProgress: 0, resolved: 0 });
+  const [wardInput,    setWardInput]    = useState('');
+  const [testimonials, setTestimonials] = useState(SEED_TESTIMONIALS);
 
   useEffect(() => {
     api.get('/complaints').then(res => {
@@ -78,13 +81,13 @@ export default function Home() {
     <div className="home-page">
 
       {/* ══════════════════════════
-          STEP 1 — HERO
+          HERO
          ══════════════════════════ */}
       <section className="home-hero">
         <div className="container">
           <div className="hero-inner">
 
-            <div className="hero-left">
+            <ScrollReveal className="hero-left" direction="up" delay={0}>
               <div className="hero-eyebrow">🇮🇳 Civic Platform for Indian Residents</div>
 
               <h1>
@@ -119,7 +122,6 @@ export default function Home() {
                 <span className="proof-text"><strong>4.8/5</strong> from 2,500+ users</span>
               </div>
 
-              {/* ── Live Feed ── */}
               {liveFeed.length > 0 && (
                 <div className="live-feed">
                   <div className="live-feed-header">
@@ -144,9 +146,9 @@ export default function Home() {
                   </div>
                 </div>
               )}
-            </div>
+            </ScrollReveal>
 
-            <div className="hero-right">
+            <ScrollReveal className="hero-right" direction="right" delay={120}>
               <div className="hero-img-wrap">
                 <img src={HERO_IMAGE} alt="City skyline — NeighbourFix civic platform" loading="eager" />
                 <div className="live-demo-badge">
@@ -154,68 +156,71 @@ export default function Home() {
                   Live Demo
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
 
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════
-          STEP 2 — HOW IT WORKS
+          HOW IT WORKS
          ══════════════════════════ */}
       <section id="how-it-works" className="how-section">
         <div className="container">
-          <div className="how-header">
-            <p className="section-eyebrow">How It Works</p>
-            <h2>Three steps to fix your neighbourhood</h2>
-            <p className="section-sub">No paperwork. No queues. Just report and watch it get resolved.</p>
-          </div>
+          <ScrollReveal direction="up" delay={0}>
+            <div className="how-header">
+              <p className="section-eyebrow">How It Works</p>
+              <h2>Three steps to fix your neighbourhood</h2>
+              <p className="section-sub">No paperwork. No queues. Just report and watch it get resolved.</p>
+            </div>
+          </ScrollReveal>
 
           <div className="how-steps">
-            <div className="how-step">
+            <ScrollReveal className="how-step" direction="up" delay={0}>
               <div className="step-num">1</div>
               <div className="step-icon">📍</div>
               <h3>Pin It</h3>
               <p>Take a photo and drop a GPS pin on the map. Your report is logged instantly with full location data.</p>
-            </div>
+            </ScrollReveal>
             <div className="how-connector">→</div>
-            <div className="how-step">
+            <ScrollReveal className="how-step" direction="up" delay={120}>
               <div className="step-num">2</div>
               <div className="step-icon">▲</div>
               <h3>Rally Votes</h3>
               <p>Neighbours upvote issues they care about. 10 upvotes triggers an automatic escalation to your ward officer.</p>
-            </div>
+            </ScrollReveal>
             <div className="how-connector">→</div>
-            <div className="how-step">
+            <ScrollReveal className="how-step" direction="up" delay={240}>
               <div className="step-num">3</div>
               <div className="step-icon">✅</div>
               <h3>Watch It Get Fixed</h3>
               <p>Track status updates in real time. When resolved, you get notified and the ward's accountability score updates.</p>
-            </div>
+            </ScrollReveal>
           </div>
 
-          {/* ── Check My Area ── */}
-          <div className="ward-hook">
-            <div className="ward-hook-content">
-              <div className="ward-hook-icon">🔍</div>
-              <div>
-                <h3>Check Your Area</h3>
-                <p>Enter your ward number to instantly see all civic issues reported near you.</p>
+          <ScrollReveal direction="up" delay={80}>
+            <div className="ward-hook">
+              <div className="ward-hook-content">
+                <div className="ward-hook-icon">🔍</div>
+                <div>
+                  <h3>Check Your Area</h3>
+                  <p>Enter your ward number to instantly see all civic issues reported near you.</p>
+                </div>
               </div>
+              <form className="ward-hook-form" onSubmit={handleWardSearch}>
+                <input
+                  type="text"
+                  className="ward-hook-input"
+                  placeholder="Enter Ward # (e.g. 16)"
+                  value={wardInput}
+                  onChange={e => setWardInput(e.target.value)}
+                />
+                <button type="submit" className="ward-hook-btn">
+                  See Issues Near Me →
+                </button>
+              </form>
             </div>
-            <form className="ward-hook-form" onSubmit={handleWardSearch}>
-              <input
-                type="text"
-                className="ward-hook-input"
-                placeholder="Enter Ward # (e.g. 16)"
-                value={wardInput}
-                onChange={e => setWardInput(e.target.value)}
-              />
-              <button type="submit" className="ward-hook-btn">
-                See Issues Near Me →
-              </button>
-            </form>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -224,20 +229,27 @@ export default function Home() {
          ══════════════════════════ */}
       <section className="testimonials-section">
         <div className="container">
-          <div className="testimonials-header">
-            <p className="section-eyebrow">What Citizens Say</p>
-            <h2>Real stories from community members<br />who are making a difference</h2>
-            <p className="section-sub">
-              Thousands of residents across India are using NeighbourFix to hold their wards accountable.
-            </p>
-          </div>
+          <ScrollReveal direction="up" delay={0}>
+            <div className="testimonials-header">
+              <p className="section-eyebrow">What Citizens Say</p>
+              <h2>Real stories from community members<br />who are making a difference</h2>
+              <p className="section-sub">
+                Thousands of residents across India are using NeighbourFix to hold their wards accountable.
+              </p>
+            </div>
+          </ScrollReveal>
 
           <div className="testimonials-grid">
-            {testimonials.map((t) => {
+            {testimonials.map((t, idx) => {
               const initials = (t.name || 'A').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
               const stars = Math.round(t.rating || 5);
               return (
-                <div key={t._id} className="tcard">
+                <ScrollReveal
+                  key={t._id}
+                  className="tcard hover-lift"
+                  direction="up"
+                  delay={STAGGER_DELAYS[idx % 3]}
+                >
                   <div className="tcard-quote">"</div>
                   <p className="tcard-message">"{t.message}"</p>
                   <div className="tcard-stars">
@@ -252,7 +264,7 @@ export default function Home() {
                       {t.role && <span>{t.role}</span>}
                     </div>
                   </div>
-                </div>
+                </ScrollReveal>
               );
             })}
           </div>
@@ -260,58 +272,53 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════
-          STEP 3 — LIVE DATA
+          STATS BAR
          ══════════════════════════ */}
       <div className="stats-bar">
         <div className="stats-bar-inner">
-          <div className="sbar-item s-orange">
+          <ScrollReveal className="sbar-item s-orange" direction="up" delay={0}>
             <span className="sbar-num">{stats.reported}</span>
             <span className="sbar-label">Reported</span>
-          </div>
-          <div className="sbar-item s-amber">
+          </ScrollReveal>
+          <ScrollReveal className="sbar-item s-amber" direction="up" delay={80}>
             <span className="sbar-num">{stats.inProgress}</span>
             <span className="sbar-label">In Progress</span>
-          </div>
-          <div className="sbar-item s-green">
+          </ScrollReveal>
+          <ScrollReveal className="sbar-item s-green" direction="up" delay={160}>
             <span className="sbar-num">{stats.resolved}</span>
             <span className="sbar-label">Resolved</span>
-          </div>
-          <div className="sbar-item">
+          </ScrollReveal>
+          <ScrollReveal className="sbar-item" direction="up" delay={240}>
             <span className="sbar-num">{stats.total}</span>
             <span className="sbar-label">Total Issues</span>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
 
       {/* ══════════════════════════
-          ABOUT SECTION
+          ABOUT
          ══════════════════════════ */}
       <section id="about" className="about-section">
         <div className="about-inner">
-          <p className="about-label">About NeighbourFix</p>
-          <h2>Making civic accountability<br />accessible to everyone</h2>
-          <p>We built NeighbourFix so every resident has a voice. Report issues, rally community upvotes, and watch your ward authorities respond — all in one transparent platform.</p>
+          <ScrollReveal direction="up" delay={0}>
+            <p className="about-label">About NeighbourFix</p>
+            <h2>Making civic accountability<br />accessible to everyone</h2>
+            <p>We built NeighbourFix so every resident has a voice. Report issues, rally community upvotes, and watch your ward authorities respond — all in one transparent platform.</p>
+          </ScrollReveal>
+
           <div className="about-features">
-            <div className="about-feat">
-              <div className="about-feat-icon">📍</div>
-              <h3>GPS-Pinned Reports</h3>
-              <p>Pin the exact location of any issue on an interactive map so authorities know precisely where to act.</p>
-            </div>
-            <div className="about-feat">
-              <div className="about-feat-icon">▲</div>
-              <h3>Community Upvoting</h3>
-              <p>Neighbours upvote issues they care about. High-priority complaints auto-escalate to ward officers at 10 votes.</p>
-            </div>
-            <div className="about-feat">
-              <div className="about-feat-icon">📊</div>
-              <h3>Ward Heatmap</h3>
-              <p>A public accountability dashboard showing resolution rates ward-by-ward.</p>
-            </div>
-            <div className="about-feat">
-              <div className="about-feat-icon">📧</div>
-              <h3>Auto Escalation</h3>
-              <p>When an issue reaches the threshold, a formal PDF complaint letter is emailed directly to your ward officer.</p>
-            </div>
+            {[
+              { icon:'📍', title:'GPS-Pinned Reports',   body:'Pin the exact location of any issue on an interactive map so authorities know precisely where to act.' },
+              { icon:'▲',  title:'Community Upvoting',   body:'Neighbours upvote issues they care about. High-priority complaints auto-escalate to ward officers at 10 votes.' },
+              { icon:'📊', title:'Ward Heatmap',          body:'A public accountability dashboard showing resolution rates ward-by-ward.' },
+              { icon:'📧', title:'Auto Escalation',       body:'When an issue reaches the threshold, a formal PDF complaint letter is emailed directly to your ward officer.' },
+            ].map((f, i) => (
+              <ScrollReveal key={f.title} className="about-feat" direction="up" delay={i * 80}>
+                <div className="about-feat-icon">{f.icon}</div>
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
