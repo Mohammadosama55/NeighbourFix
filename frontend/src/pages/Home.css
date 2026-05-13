@@ -314,6 +314,141 @@
 .ward-active-tag button:hover { color: var(--red); }
 
 /* ══════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════ */
+.testimonials-section {
+  padding: 80px 0 72px;
+  background: var(--bg-alt);
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 52px;
+}
+
+.section-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-mid);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin: 0 0 18px;
+}
+
+.testimonials-header h2 {
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 14px;
+  line-height: 1.25;
+}
+
+.section-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .testimonials-grid { grid-template-columns: 1fr; } }
+
+.tcard {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  transition: box-shadow .18s, transform .18s;
+}
+
+.tcard:hover {
+  box-shadow: 0 8px 32px rgba(22,163,74,.10);
+  transform: translateY(-3px);
+}
+
+.tcard-quote {
+  font-size: 64px;
+  line-height: 1;
+  color: var(--primary-mid);
+  font-family: Georgia, serif;
+  position: absolute;
+  top: 12px;
+  left: 22px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.tcard-message {
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.7;
+  margin: 20px 0 0;
+  flex: 1;
+}
+
+.tcard-stars {
+  display: flex;
+  gap: 3px;
+}
+
+.tstar       { font-size: 16px; color: #d1d5db; }
+.tstar.filled { color: #f59e0b; }
+
+.tcard-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.tcard-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tcard-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tcard-author-info strong {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.tcard-author-info span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ══════════════════════════════════
    STEP 3 — STATS BAR
 ══════════════════════════════════ */
 .stats-bar {

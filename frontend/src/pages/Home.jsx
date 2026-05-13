@@ -7,13 +7,47 @@ import './Home.css';
 const CAT_ICONS  = { road:'🛣️', water:'💧', garbage:'🗑️', drainage:'🚿', power:'⚡', other:'📋' };
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=900&q=80';
 
+const SEED_TESTIMONIALS = [
+  {
+    _id: 's1', rating: 5, name: 'Aarav Patel',
+    role: 'Resident, Bangalore',
+    message: 'NeighbourFix helped me report a huge pothole near my street. The issue was resolved in just 3 days — I couldn\'t believe how fast the ward team responded!',
+  },
+  {
+    _id: 's2', rating: 5, name: 'Meera Sharma',
+    role: 'Teacher, Chennai',
+    message: 'I love how simple and fast this platform is. I reported broken streetlights on my road and within a week, they were all fixed. Clean streets and working lights again!',
+  },
+  {
+    _id: 's3', rating: 4, name: 'Rajesh Kumar',
+    role: 'Shop Owner, Mumbai',
+    message: 'The drainage outside my shop was overflowing for months. After posting on NeighbourFix and getting 12 upvotes, the authorities finally came and fixed it properly.',
+  },
+  {
+    _id: 's4', rating: 5, name: 'Priya Singh',
+    role: 'Homemaker, Delhi',
+    message: 'The upvoting feature is brilliant. My neighbours all rallied together and our garbage collection frequency doubled. Real community power in action!',
+  },
+  {
+    _id: 's5', rating: 5, name: 'Suresh Nair',
+    role: 'Engineer, Kochi',
+    message: 'Transparent, fast, and actually works. I can track my complaint\'s status live. No more calling the corporation helpline and waiting on hold for hours.',
+  },
+  {
+    _id: 's6', rating: 4, name: 'Divya Reddy',
+    role: 'Student, Hyderabad',
+    message: 'Reported a water leakage near my college. The GPS pin feature made it so easy for the authorities to find the exact spot. Fixed within 5 days!',
+  },
+];
+
 export default function Home() {
   const { user } = useAuth();
   const navigate  = useNavigate();
 
-  const [liveFeed, setLiveFeed]   = useState([]);
-  const [stats, setStats]         = useState({ total: 0, reported: 0, inProgress: 0, resolved: 0 });
-  const [wardInput, setWardInput] = useState('');
+  const [liveFeed,      setLiveFeed]      = useState([]);
+  const [stats,         setStats]         = useState({ total: 0, reported: 0, inProgress: 0, resolved: 0 });
+  const [wardInput,     setWardInput]     = useState('');
+  const [testimonials,  setTestimonials]  = useState(SEED_TESTIMONIALS);
 
   useEffect(() => {
     api.get('/complaints').then(res => {
@@ -25,6 +59,11 @@ export default function Home() {
         resolved:   all.filter(c => c.status === 'resolved').length,
       });
       setLiveFeed([...all].filter(c => c.status === 'resolved').slice(0, 3));
+    }).catch(() => {});
+
+    api.get('/feedback').then(res => {
+      const real = res.data.filter(f => f.rating >= 4 && f.message && f.name);
+      if (real.length >= 3) setTestimonials(real.slice(0, 6));
     }).catch(() => {});
   }, []);
 
@@ -176,6 +215,46 @@ export default function Home() {
                 See Issues Near Me →
               </button>
             </form>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════
+          TESTIMONIALS
+         ══════════════════════════ */}
+      <section className="testimonials-section">
+        <div className="container">
+          <div className="testimonials-header">
+            <p className="section-eyebrow">What Citizens Say</p>
+            <h2>Real stories from community members<br />who are making a difference</h2>
+            <p className="section-sub">
+              Thousands of residents across India are using NeighbourFix to hold their wards accountable.
+            </p>
+          </div>
+
+          <div className="testimonials-grid">
+            {testimonials.map((t) => {
+              const initials = (t.name || 'A').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+              const stars = Math.round(t.rating || 5);
+              return (
+                <div key={t._id} className="tcard">
+                  <div className="tcard-quote">"</div>
+                  <p className="tcard-message">"{t.message}"</p>
+                  <div className="tcard-stars">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span key={i} className={i < stars ? 'tstar filled' : 'tstar'}>★</span>
+                    ))}
+                  </div>
+                  <div className="tcard-author">
+                    <div className="tcard-avatar">{initials}</div>
+                    <div className="tcard-author-info">
+                      <strong>{t.name || 'Anonymous'}</strong>
+                      {t.role && <span>{t.role}</span>}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
