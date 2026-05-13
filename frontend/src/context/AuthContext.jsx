@@ -1,17 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '../api/axios';
+import { connectSocket, disconnectSocket } from '../socket';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user,    setUser]    = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const applyUser = (u) => {
+    setUser(u);
+    if (u?._id) connectSocket(u._id);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('nf_token');
     if (token) {
       api.get('/auth/me')
-        .then(res => setUser(res.data))
+        .then(res => applyUser(res.data))
         .catch(() => localStorage.removeItem('nf_token'))
         .finally(() => setLoading(false));
     } else {
@@ -23,19 +29,20 @@ export function AuthProvider({ children }) {
     const res = await api.post('/auth/login', { email, password });
     localStorage.setItem('nf_token', res.data.token);
     const me = await api.get('/auth/me');
-    setUser(me.data);
+    applyUser(me.data);
     return me.data;
   };
 
   const register = async (data) => {
     const res = await api.post('/auth/register', data);
     localStorage.setItem('nf_token', res.data.token);
-    setUser(res.data.user);
+    applyUser(res.data.user);
     return res.data.user;
   };
 
   const logout = () => {
     localStorage.removeItem('nf_token');
+    disconnectSocket();
     setUser(null);
   };
 

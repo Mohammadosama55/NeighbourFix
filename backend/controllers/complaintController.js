@@ -2,6 +2,7 @@ import Complaint from '../models/Complaint.js';
 import User from '../models/User.js';
 import { sendEscalationEmail, sendTestEmail } from '../utils/emailService.js';
 import { generateComplaintPDF } from '../utils/pdfGenerator.js';
+import { emitToUser } from '../socket.js';
 
 // Resident-only create with file upload support
 export const createComplaint = async (req, res) => {
@@ -160,6 +161,12 @@ export const updateStatus = async (req, res) => {
     return res.status(404).json({ message: 'Complaint not found' });
   }
 
+  emitToUser(complaint.reportedBy?.toString(), 'statusUpdate', {
+    complaintId:    complaint._id,
+    complaintTitle: complaint.title,
+    status:         complaint.status,
+  });
+
   return res.json(complaint);
 };
 
@@ -192,6 +199,13 @@ export const resolveComplaint = async (req, res) => {
   complaint.updatedAt = new Date();
 
   await complaint.save();
+
+  emitToUser(complaint.reportedBy?.toString(), 'statusUpdate', {
+    complaintId:    complaint._id,
+    complaintTitle: complaint.title,
+    status:         'resolved',
+    resolvedAt:     complaint.resolvedAt,
+  });
 
   return res.json(complaint);
 };

@@ -1,0 +1,107 @@
+.toast-stack {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 360px;
+  width: calc(100vw - 48px);
+}
+
+.toast-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.08);
+  cursor: pointer;
+  border-left: 4px solid #16a34a;
+  animation: toastIn .3s cubic-bezier(.34,1.56,.64,1);
+  transition: transform .15s, box-shadow .15s;
+  position: relative;
+}
+
+.toast-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.18);
+}
+
+.toast-resolved    { border-left-color: #16a34a; }
+.toast-in_progress { border-left-color: #d97706; }
+.toast-rejected    { border-left-color: #dc2626; }
+.toast-reported    { border-left-color: #6b7280; }
+
+.toast-icon {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 3px;
+}
+
+.toast-msg {
+  font-size: 13px;
+  color: #374151;
+  margin: 0 0 5px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast-cta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #16a34a;
+  margin: 0;
+}
+
+.toast-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color .15s, background .15s;
+}
+
+.toast-close:hover {
+  color: #374151;
+  background: #f3f4f6;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px) scale(.95); }
+  to   { opacity: 1; transform: translateX(0)    scale(1);   }
+}
+
+@media (max-width: 480px) {
+  .toast-stack {
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+  }
+}

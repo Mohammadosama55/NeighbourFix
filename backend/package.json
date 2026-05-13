@@ -21,7 +21,8 @@
     "mongoose": "^9.3.2",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.4",
-    "pdfkit": "^0.18.0"
+    "pdfkit": "^0.18.0",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "jest": "^30.3.0",
