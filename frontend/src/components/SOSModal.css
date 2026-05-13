@@ -1,0 +1,129 @@
+.sos-modal {
+  background: #fff; border-radius: 20px;
+  width: 100%; max-width: 520px;
+  padding: 32px; position: relative;
+  box-shadow: 0 24px 80px rgba(0,0,0,.22);
+  animation: slide-up .2s ease;
+  max-height: 90vh; overflow-y: auto;
+}
+
+/* Header */
+.sos-header { text-align: center; margin-bottom: 24px; }
+
+.sos-pulse-ring {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #fee2e2; margin-bottom: 12px; position: relative;
+}
+.sos-pulse-ring::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 50%; border: 2px solid #fca5a5;
+  animation: sos-ring 1.8s ease-out infinite;
+}
+@keyframes sos-ring {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+
+.sos-header-icon { font-size: 32px; }
+.sos-header h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.sos-header p  { font-size: 13px; color: var(--muted); }
+
+/* Emergency cards */
+.sos-numbers {
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;
+}
+
+.sos-card {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+  transition: background .15s, border-color .15s;
+}
+.sos-card:hover { background: #fff; border-color: var(--border-strong); }
+
+.sos-card.sos-primary {
+  background: #fef2f2; border-color: #fca5a5;
+}
+.sos-card.sos-primary:hover { background: #fee2e2; }
+
+.sos-card-left {
+  display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
+}
+.sos-icon { font-size: 22px; flex-shrink: 0; }
+.sos-info { display: flex; flex-direction: column; min-width: 0; }
+.sos-label { font-size: 14px; font-weight: 700; color: var(--text); }
+.sos-desc  { font-size: 12px; color: var(--muted); }
+
+.sos-card-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.sos-call-btn {
+  padding: 8px 14px;
+  background: var(--red); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 800; cursor: pointer;
+  text-decoration: none; display: inline-flex;
+  align-items: center; gap: 5px;
+  transition: background .15s, transform .15s;
+  white-space: nowrap;
+}
+.sos-call-btn:hover { background: #b91c1c; transform: scale(1.02); }
+
+.sos-card.sos-primary .sos-call-btn {
+  font-size: 16px; padding: 10px 18px;
+}
+
+.sos-copy-btn {
+  background: var(--bg-section); border: 1px solid var(--border);
+  border-radius: 6px; width: 30px; height: 30px;
+  font-size: 13px; cursor: pointer; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.sos-copy-btn:hover { background: var(--primary-light); color: var(--primary); }
+
+/* Divider */
+.sos-divider {
+  text-align: center; position: relative; margin: 20px 0;
+}
+.sos-divider::before {
+  content: ''; position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px; background: var(--border);
+}
+.sos-divider span {
+  position: relative; background: #fff;
+  padding: 0 12px; font-size: 12px;
+  color: var(--muted); font-weight: 600;
+}
+
+/* Report block */
+.sos-report-block {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 16px;
+  background: var(--primary-light); border: 1.5px solid var(--primary-mid);
+  border-radius: var(--radius); padding: 16px 20px;
+  flex-wrap: wrap;
+}
+
+.sos-report-text strong { font-size: 14px; font-weight: 700; display: block; margin-bottom: 2px; }
+.sos-report-text p  { font-size: 12px; color: var(--muted); margin: 0; }
+
+.sos-report-btn {
+  padding: 10px 18px; background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; white-space: nowrap;
+  transition: background .15s;
+}
+.sos-report-btn:hover { background: var(--primary-dark); }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .sos-modal { padding: 24px 16px; }
+  .sos-call-btn { font-size: 13px; padding: 7px 12px; }
+  .sos-card.sos-primary .sos-call-btn { font-size: 14px; padding: 8px 14px; }
+}
