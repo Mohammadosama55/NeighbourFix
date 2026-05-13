@@ -42,6 +42,7 @@ export default function Navbar() {
           {/* CENTER: Main nav links */}
           <div className={`navbar-center ${menuOpen ? 'open' : ''}`}>
             <Link to="/complaints" className={`nav-link ${isActive('/complaints') ? 'active' : ''}`} onClick={close}>Complaints</Link>
+            <Link to="/community"  className={`nav-link ${isActive('/community')  ? 'active' : ''}`} onClick={close}>Community</Link>
             <Link to="/heatmap"    className={`nav-link ${isActive('/heatmap')    ? 'active' : ''}`} onClick={close}>Heatmap</Link>
             <a href="#about" className="nav-link" onClick={close}>About</a>
             {user?.role === 'ward_admin' && (

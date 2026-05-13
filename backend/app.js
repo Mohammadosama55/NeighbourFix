@@ -7,6 +7,7 @@ import { dirname } from 'path';
 import authRoutes from './routes/auth.js';
 import complaintRoutes from './routes/complaints.js';
 import feedbackRoutes from './routes/feedback.js';
+import messagesRoutes from './routes/messages.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,6 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/messages', messagesRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'NeighbourFix API is running' });
