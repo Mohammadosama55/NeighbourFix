@@ -44,13 +44,59 @@ export const createComplaint = async (req, res) => {
 };
 
 export const getComplaints = async (req, res) => {
-  const { category, status, wardNumber } = req.query;
+  const { category, status, wardNumber, page, limit = '10', sort = 'new', q } = req.query;
   const filter = {};
 
   if (category) filter.category = category;
-  if (status) filter.status = status;
+  if (status)   filter.status   = status;
   if (wardNumber) filter.wardNumber = wardNumber;
+  if (q) filter.$or = [
+    { title:   { $regex: q, $options: 'i' } },
+    { address: { $regex: q, $options: 'i' } },
+    { description: { $regex: q, $options: 'i' } },
+  ];
 
+  // ── Paginated mode (when ?page= is present) ──
+  if (page !== undefined) {
+    const pageNum  = Math.max(1, parseInt(page)  || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 10));
+    const skip     = (pageNum - 1) * limitNum;
+
+    if (sort === 'hot') {
+      // Fetch a larger pool, hot-sort in memory, then slice
+      const pool = await Complaint.find(filter).sort({ createdAt: -1 }).limit(300).lean();
+      const now  = Date.now();
+      pool.sort((a, b) => {
+        const ageA = (now - new Date(a.createdAt)) / 3_600_000 + 2;
+        const ageB = (now - new Date(b.createdAt)) / 3_600_000 + 2;
+        return (b.upvotes / Math.pow(ageB, 1.5)) - (a.upvotes / Math.pow(ageA, 1.5));
+      });
+      const sliced = pool.slice(skip, skip + limitNum);
+      return res.json({
+        complaints: sliced,
+        total:   pool.length,
+        page:    pageNum,
+        pages:   Math.ceil(pool.length / limitNum),
+        hasMore: skip + limitNum < pool.length,
+      });
+    }
+
+    const sortObj = sort === 'top' ? { upvotes: -1, createdAt: -1 } : { createdAt: -1 };
+    const [complaints, total] = await Promise.all([
+      Complaint.find(filter).sort(sortObj).skip(skip).limit(limitNum).lean(),
+      Complaint.countDocuments(filter),
+    ]);
+
+    return res.json({
+      complaints,
+      total,
+      page:    pageNum,
+      pages:   Math.ceil(total / limitNum),
+      hasMore: skip + limitNum < total,
+    });
+  }
+
+  // ── Legacy flat-array mode (Home, Community, AdminDashboard, Heatmap) ──
   const complaints = await Complaint.find(filter).sort({ createdAt: -1 });
   return res.json(complaints);
 };

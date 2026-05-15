@@ -1,100 +1,227 @@
-.cc-card {
-  display: flex; flex-direction: column;
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1.5px solid var(--border);
+/* ═══════════════════════════════════
+   REDDIT-STYLE COMPLAINT CARD
+═══════════════════════════════════ */
+.rc-card {
+  display: flex;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   overflow: hidden;
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  color: inherit;
-  box-shadow: 0 1px 3px rgba(0,0,0,.04);
-}
-
-.cc-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--border-strong);
-}
-
-/* Image */
-.cc-img {
-  position: relative; height: 180px; overflow: hidden;
-  background: var(--bg-alt);
-}
-
-.cc-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform .4s ease;
-}
-
-.cc-card:hover .cc-img img { transform: scale(1.04); }
-
-.cc-no-img {
+  transition: border-color .15s;
   position: relative;
-  height: 72px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-  border-bottom: 1px solid var(--border);
 }
 
-.cc-esc {
-  position: absolute; top: 10px; right: 10px;
-  background: rgba(220,38,38,.88); color: #fff;
-  font-size: 11px; font-weight: 700;
-  padding: 3px 9px; border-radius: 99px;
-  backdrop-filter: blur(4px);
+.rc-card:hover { border-color: #818384; }
+
+.rc-card.rc-upvoted { border-left: 3px solid var(--primary); }
+
+/* ── Vote column ── */
+.rc-vote-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: #f8f9fa;
+  min-width: 38px;
+  flex-shrink: 0;
 }
 
-/* Body */
-.cc-body { padding: 16px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
-
-.cc-meta-row {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 8px;
+.rc-vote-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #878a8c;
+  padding: 3px 5px;
+  border-radius: 2px;
+  line-height: 1;
+  transition: color .12s, background .12s;
 }
 
-.cc-cat {
-  font-size: 11px; font-weight: 700;
-  padding: 3px 9px; border-radius: 99px;
-  text-transform: capitalize; letter-spacing: .02em;
+.rc-vote-btn:hover { background: #e9e9e9; }
+
+.rc-vote-up.voted { color: var(--primary); }
+
+.rc-score {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1c1c1c;
+  line-height: 1;
+  text-align: center;
 }
 
-.cc-status {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; font-weight: 600; color: var(--muted);
+.rc-score.score-up { color: var(--primary); }
+
+/* ── Content column ── */
+.rc-content {
+  flex: 1;
+  padding: 10px 12px 8px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.cc-dot {
-  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-}
-
-.cc-title {
-  font-size: 15px; font-weight: 700; color: var(--text);
+/* Meta row */
+.rc-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-size: 11.5px;
+  color: #878a8c;
   line-height: 1.4;
+}
+
+.rc-ward {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rc-ward:hover { text-decoration: underline; }
+
+.rc-sep { color: #ccc; margin: 0 1px; }
+
+.rc-cat { font-weight: 600; }
+
+.rc-author { color: #0079d3; }
+
+.rc-esc-badge {
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: rgba(220,38,38,.1);
+  color: #dc2626;
+  padding: 1px 7px;
+  border-radius: 99px;
+  border: 1px solid rgba(220,38,38,.25);
+}
+
+/* Title + thumbnail row */
+.rc-title-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.rc-title-block { flex: 1; min-width: 0; }
+
+.rc-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+  text-decoration: none;
+  display: block;
+}
+
+.rc-title:hover { color: var(--primary); }
+
+.rc-desc {
+  font-size: 13px;
+  color: #3c3c3c;
+  line-height: 1.55;
+  margin: 4px 0 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.cc-loc {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; color: var(--muted);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+/* Thumbnail */
+.rc-thumb-wrap {
+  flex-shrink: 0;
+  display: block;
+  width: 96px;
+  height: 72px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
 }
 
-.cc-loc svg { flex-shrink: 0; color: var(--muted-2); }
-
-.cc-footer {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: auto; padding-top: 10px;
-  border-top: 1px solid var(--border);
+.rc-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .3s ease;
 }
 
-.cc-upvotes {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; font-weight: 700; color: var(--primary);
-  background: var(--primary-light);
-  padding: 3px 10px; border-radius: 99px;
+.rc-thumb-wrap:hover .rc-thumb { transform: scale(1.06); }
+
+/* Address */
+.rc-address {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #878a8c;
+  margin: 0;
 }
 
-.cc-time { font-size: 12px; color: var(--muted-2); }
+.rc-address svg { flex-shrink: 0; }
+
+/* Actions bar */
+.rc-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.rc-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.rc-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rc-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.rc-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #878a8c;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .12s, color .12s;
+  white-space: nowrap;
+}
+
+.rc-action-btn:hover {
+  background: #e9e9e9;
+  color: var(--text);
+}
+
+.rc-action-btn.rc-upvote-action.upvoted {
+  color: var(--primary);
+}
+
+.rc-action-btn.copied {
+  color: var(--primary);
+}
