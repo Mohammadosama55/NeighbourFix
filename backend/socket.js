@@ -36,8 +36,14 @@ function getWardOnlineUsers(wardNumber) {
 }
 
 export function initIO(httpServer) {
+  const clientUrl = process.env.CLIENT_URL || '*';
+
   io = new Server(httpServer, {
-    cors: { origin: '*', methods: ['GET', 'POST', 'PUT'] },
+    cors: {
+      origin: clientUrl,
+      methods: ['GET', 'POST', 'PUT'],
+      credentials: true,
+    },
   });
 
   io.on('connection', (socket) => {
