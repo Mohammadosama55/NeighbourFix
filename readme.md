@@ -20,6 +20,8 @@ The project is deployed and available at:
 
 https://neighbour-fix.vercel.app/
 
+![NeighbourFix homepage screenshot](attached_assets/screenshots/homepage-demo.png)
+
 ## Technology Stack
 
 - Frontend: React.js, Vite, React Router, Leaflet, Axios
