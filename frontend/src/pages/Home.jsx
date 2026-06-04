@@ -6,7 +6,7 @@ import api from '../api/axios';
 import './Home.css';
 
 const CAT_ICONS  = { road:'🛣️', water:'💧', garbage:'🗑️', drainage:'🚿', power:'⚡', other:'📋' };
-const HERO_IMAGE = 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=900&q=80';
+const HERO_IMAGE = 'https://www.yogiraj.co.in/wp-content/uploads/2023/11/clean-India-green-India-1.jpeg';
 
 const SEED_TESTIMONIALS = [
   {
